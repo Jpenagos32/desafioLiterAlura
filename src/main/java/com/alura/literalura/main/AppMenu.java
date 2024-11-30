@@ -89,31 +89,37 @@ public class AppMenu {
 
       // Convertir el resultado en objeto Java
       BooksRecord response = converter.convertFromJson(json, BooksRecord.class);
+      if (response.results().isEmpty()) {
+        System.out.println("No se encuentra el libro");
 
-      // TODO hacer que en caso de que la repuesta venga vacia, envie un mensaje al respecto
+      } else {
 
-      // Obtener el primer resultado de la respuesta
-      Results firstResult = response.results().getFirst();
+        // TODO hacer que en caso de que la repuesta venga vacia, envie un mensaje al respecto
 
-      // guardar el libro y su autor en la base de datos
-      BookEntity bookEntity = new BookEntity(response);
-      String authorName = firstResult.authors().getFirst().name();
-      Integer authorBirth = firstResult.authors().getFirst().birthYear();
-      Integer authorDeat = firstResult.authors().getFirst().deathYear();
-      AuthorEntity author = new AuthorEntity(authorName, authorBirth, authorDeat);
-      bookEntity.setAuthor(author);
-      repository.save(bookEntity);
+        // Obtener el primer resultado de la respuesta
+        Results firstResult = response.results().getFirst();
 
-      //imprimir la informacion necesaria
-      System.out.println("Titulo: " + firstResult.title());
-      System.out.println("Número de descargas: " + firstResult.downloadCount());
-      System.out.println("Autores:");
-      firstResult.authors().forEach(a -> System.out.printf("""
-        - Nombre: %s
-        - Fecha de nacimiento: %d
-        - Fecha de muerte: %d %n""", a.name(), a.birthYear(), a.deathYear()));
-      System.out.println("Idiomas:");
-      firstResult.languages().forEach(e -> System.out.println("- " + e));
+        // guardar el libro y su autor en la base de datos
+        BookEntity bookEntity = new BookEntity(response);
+        String authorName = firstResult.authors().getFirst().name();
+        Integer authorBirth = firstResult.authors().getFirst().birthYear();
+        Integer authorDeat = firstResult.authors().getFirst().deathYear();
+        AuthorEntity author = new AuthorEntity(authorName, authorBirth, authorDeat);
+        bookEntity.setAuthor(author);
+        repository.save(bookEntity);
+
+        //imprimir la informacion necesaria
+        System.out.println("Titulo: " + firstResult.title());
+        System.out.println("Número de descargas: " + firstResult.downloadCount());
+        System.out.println("Autores:");
+        firstResult.authors().forEach(a -> System.out.printf("""
+          - Nombre: %s
+          - Fecha de nacimiento: %d
+          - Fecha de muerte: %d %n""", a.name(), a.birthYear(), a.deathYear()));
+        System.out.println("Idiomas:");
+        firstResult.languages().forEach(e -> System.out.println("- " + e));
+      }
+
 
     } catch (IOException | InterruptedException e) {
       throw new RuntimeException(e);
