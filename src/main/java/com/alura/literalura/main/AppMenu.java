@@ -7,10 +7,10 @@ import com.alura.literalura.model.Results;
 import com.alura.literalura.repository.BooksRepository;
 import com.alura.literalura.services.ApiConnection;
 import com.alura.literalura.services.DataConvert;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -37,6 +37,10 @@ public class AppMenu {
         Ingrese la opcion que desea realizar:
         1. Buscar libro por nombre
         2. Listar todos los libros buscados
+        3. Listar autores de los libros buscados
+        4. Listar autores vivos por rango de años
+        5. Listar libros por idioma
+        6. Listar autores vivos en determinado año
                 
         0. Salir
         """);
@@ -52,6 +56,18 @@ public class AppMenu {
           case 2:
             showAllBooks();
             break;
+          case 3:
+            listAllAuthors();
+            break;
+          case 4:
+            listAuthorsByYears();
+            break;
+          case 5:
+            listBooksByLanguage();
+            break;
+          case 6:
+            listAliveAuthors();
+            break;
           case 0:
             System.out.println("*** Programa terminado ***");
             break;
@@ -62,6 +78,75 @@ public class AppMenu {
         System.out.println("Ingrese unicamente números");
       }
     }
+  }
+
+  private void listAliveAuthors() {
+    // Preguntar al usuario por el año
+    System.out.println("Ingrese el año que desea buscar");
+    int year = Integer.parseInt(scan.nextLine());
+    // Buscar datos en la base de datos
+    List<AuthorEntity> autores = repository.searchAliveAuthorsByYear(year);
+    // Mostrar los datos al usuario
+    if (autores.isEmpty()){
+      System.out.println("No hay autores vivos en ese año dentro de la base de datos");
+    } else {
+      System.out.println("***Listado de autores vivos en el año " + year + "***");
+      autores.forEach(a -> System.out.printf("""
+        ******************************************
+        - Autor: %s
+        - Año de nacimiento: %d
+        - Año de fallecimiento: %d %n
+        """, a.getName(), a.getBirthYear(), a.getDeathYear()));
+    }
+  }
+
+  private void listBooksByLanguage() {
+    // Preguntar al usuario por los lenguajes
+    System.out.println("Seleccione el idioma de los libros que desea ver:\n1. Español\n2. Inglés");
+    int opcion = Integer.parseInt(scan.nextLine());
+    // Traer datos de la base de datos
+    List<BookEntity> books = new ArrayList<>();
+    if (opcion == 1) {
+      books = repository.findByLanguage("es");
+    } else if(opcion == 2){
+      books = repository.findByLanguage("en");
+    } else {
+      System.out.println("Opcion Inválida, intente nuevamente");
+    }
+    // Mostrar la informacion al usuario
+    if (books.isEmpty()){
+      System.out.println("No Existen libros en el idioma seleccionado");
+    } else {
+      books.forEach(b -> System.out.printf("""
+        Libro:
+          - Titulo: %s
+          - Autor: %s
+          - Cantidad de descargas: %d %n
+        """, b.getTitle(), b.getAuthor().getName(), b.getDownloadCount()));
+    }
+
+  }
+
+  private void listAuthorsByYears() {
+    System.out.println("Ingrese el año de nacimiento del autor");
+    int birthYear = Integer.parseInt(scan.nextLine());
+
+    System.out.println("Ingrese el año de fallecimiento del autor");
+    int deathYear = Integer.parseInt(scan.nextLine());
+
+    List<AuthorEntity> authors = repository.searAuthorsByYear(birthYear, deathYear);
+
+    authors.forEach(a -> System.out.println("\nNombre: " + a.getName()));
+  }
+
+  private void listAllAuthors() {
+    List<AuthorEntity> authors = repository.searchAllAuthors();
+    authors.forEach(a -> System.out.printf("""
+      Autor:
+        - Nombre: %s
+        - Año de Nacimiento: %s
+        - Año de Fallecimiento: %s %n
+      """, a.getName(), a.getBirthYear(), a.getDeathYear()));
   }
 
   private void showAllBooks() {
@@ -93,9 +178,6 @@ public class AppMenu {
         System.out.println("No se encuentra el libro");
 
       } else {
-
-        // TODO hacer que en caso de que la repuesta venga vacia, envie un mensaje al respecto
-
         // Obtener el primer resultado de la respuesta
         Results firstResult = response.results().getFirst();
 

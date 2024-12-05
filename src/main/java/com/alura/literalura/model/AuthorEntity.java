@@ -18,7 +18,7 @@ public class AuthorEntity {
   private Integer birthYear;
   private Integer deathYear;
 
-  // Indicamos que hace parte de la relacion uno a muchos
+  // Indicamos que hace parte de la relacion uno a uno
   @OneToOne(mappedBy = "author")
   private BookEntity book;
 

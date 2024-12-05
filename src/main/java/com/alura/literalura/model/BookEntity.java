@@ -20,7 +20,7 @@ public class BookEntity {
   private Long downloadCount;
   private String language;
 
-  // Enlazamos la relacion uno a muchos entre Book y Author
+  // Enlazamos la relacion uno a uno entre Book y Author
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "author_id", referencedColumnName = "id")
   private AuthorEntity author;
