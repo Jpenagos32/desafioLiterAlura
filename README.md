@@ -4,14 +4,15 @@ Este desafio Está construido utilizando Java con Spring
 
 ## Tabla de contenidos
 
-- [Notas aclaratorias](#notas-aclaratorias)
-- [Buscar libro por nombre](#1-buscar-libro-por-nombre)
-- [Listar todos los libros buscados](#2-listar-todos-los-libros-buscados)
-- [Listar autores de los libros buscados](#3-listar-autores-de-los-libros-buscados)
-- [Listar autores vivos por rango de años](#4-listar-autores-vivos-por-rango-de-años)
-- [Listar libros por idioma](#5-listar-libros-por-idioma)
-- [Listar autores vivos en determinado año](#6-listar-autores-vivos-en-determinado-año)
-- [Salir](#7-salir)
+- [Listado de opciones disponibles en la aplicación](#listado-de-opciones-disponibles-en-la-aplicación)
+  - [Notas aclaratorias](#notas-aclaratorias)
+  - [Buscar libro por nombre](#1-buscar-libro-por-nombre)
+  - [Listar todos los libros buscados](#2-listar-todos-los-libros-buscados)
+  - [Listar autores de los libros buscados](#3-listar-autores-de-los-libros-buscados)
+  - [Listar autores vivos por rango de años](#4-listar-autores-vivos-por-rango-de-años)
+  - [Listar libros por idioma](#5-listar-libros-por-idioma)
+  - [Listar autores vivos en determinado año](#6-listar-autores-vivos-en-determinado-año)
+  - [Salir](#7-salir)
 
 ## Listado de opciones disponibles en la aplicación
 
